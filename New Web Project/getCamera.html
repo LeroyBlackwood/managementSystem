@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera</title>
+</head>
+<body>
+    <canvas id="canvas"
+        width="410px" height="300px"
+        style="transform:scaleX(-1)">
+    </canvas>
+    <img  id="image" alt="" style="position: relative; left:0; transform: scaleX(-1)">
+    <br>
+    <div>
+        <div style="display: flex;
+        align-items: center;
+        justify-content:center;">
+
+                <div style="display: flex;
+                align-items: center;
+                justify-content:center;
+                width: 250px; height:250px;
+                overflow: hidden;
+                border-radius: 100%">
+                    <video id="video"
+                    style="height: 250px;
+                    transform:scaleX(-1)" autoplay></video>
+                </div>
+
+        </div>
+
+       <button id="callCamera">Camera On</button>
+    </div>
+</body>
+<script>
+        const video = document.querySelector("#video");
+        const canvas = document.querySelector("#canvas");
+        const button = document.querySelector("#callCamera");
+        const image = document.querySelector("#image");
+
+  // Prefer camera resolution nearest to 1280x720.
+
+      
+    navigator.mediaDevices.getUserMedia({video:true, audio:false})
+        .then((source) => {
+          video.srcObject = source;
+            video.play();
+          })
+          .catch((err) => {
+            console.error(`An error occurred: ${err}`);
+          });
+          
+          button.addEventListener("click", () => {
+            const context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const data = canvas.toDataURL("image/png");
+            image.setAttribute("src", data);
+            canvas.style.display = "none"
+          })
+        
+
+
+
+</script>
+</html>
